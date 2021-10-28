@@ -1,4 +1,7 @@
-﻿
+﻿#programmed by pheonixmmkc777
+# 10/28/2021
+
+
 #init variables
 $Steps = 0
 $PlayerSpawn = "30,30"
@@ -60,6 +63,12 @@ function main {
 
     $Playerimg = (get-item "$Path/assets/skull.png")
     $Playerimg = [System.Drawing.Image]::Fromfile($Playerimg)
+    $PlayerimgD = (get-item "$Path/assets/skullD.png")
+    $PlayerimgD = [System.Drawing.Image]::Fromfile($PlayerimgD)
+    $PlayerimgL = (get-item "$Path/assets/skullL.png")
+    $PlayerimgL = [System.Drawing.Image]::Fromfile($PlayerimgL)
+    $PlayerimgR = (get-item "$Path/assets/skullR.png")
+    $PlayerimgR = [System.Drawing.Image]::Fromfile($PlayerimgR)
 
     $Player = new-object Windows.Forms.PictureBox
     $Player.Image = $Playerimg
@@ -69,6 +78,9 @@ function main {
 
     $Deathimg = (get-item "$Path/assets/death.png")
     $Deathimg = [System.Drawing.Image]::Fromfile($Deathimg)
+
+
+
 
     $Death = new-object Windows.Forms.PictureBox
     $Death.Image = $Deathimg
@@ -108,12 +120,12 @@ function main {
 
 Function ShiftPlayerLeft {
 
-    
+    $Player.Image = $PlayerimgL
     $script:PlayerXAxis = $PlayerXAxis - 10
-    If ($PlayerXAxis -lt "0") {ShiftPlayerRight}
     
+    CheckLegalMove
     DeathWiggle
-    KillZone
+    CheckKillZone
 
     $Player.Location = "$PlayerXAxis,$PlayerYAxis"
     GetPlayerDebug
@@ -124,11 +136,11 @@ Function ShiftPlayerLeft {
 
 Function ShiftPlayerRight {
 
-    
+    $Player.Image = $PlayerimgR
     $script:PlayerXAxis = $PlayerXAxis + 10
-    If ($PlayerXAxis -gt "300") {ShiftPlayerLeft}
+    CheckLegalMove
     DeathWiggle
-    KillZone
+    CheckKillZone
 
     $Player.Location = "$PlayerXAxis,$PlayerYAxis"
     GetPlayerDebug
@@ -139,11 +151,11 @@ Function ShiftPlayerRight {
 
 Function ShiftPlayerDown {
 
-    
+    $Player.Image = $PlayerimgD
     $script:PlayerYAxis = $PlayerYAxis + 10
-    If ($PlayerYAxis -gt "240") {ShiftPlayerUp}
+    CheckLegalMove
     DeathWiggle
-    KillZone
+    CheckKillZone
 
     $Player.Location = "$PlayerXAxis,$PlayerYAxis"
     GetPlayerDebug
@@ -153,11 +165,11 @@ Function ShiftPlayerDown {
 
 Function ShiftPlayerUp {
 
-    
+    $Player.Image = $Playerimg
     $script:PlayerYAxis = $PlayerYAxis - 10
-    If ($PlayerYAxis -lt "0") {ShiftPlayerDown}
+    CheckLegalMove
     DeathWiggle
-    KillZone
+    CheckKillZone
 
     $Player.Location = "$PlayerXAxis,$PlayerYAxis"
     GetPlayerDebug
@@ -165,8 +177,17 @@ Function ShiftPlayerUp {
     $PlayerScore.Text = "Score `n$Steps"
 }
 
+function CheckLegalMove {
 
-Function KillZone {
+
+If ($PlayerXAxis -lt "0") {ShiftPlayerRight}
+If ($PlayerXAxis -gt "300") {ShiftPlayerLeft}
+If ($PlayerYAxis -gt "240") {ShiftPlayerUp}
+If ($PlayerYAxis -lt "0") {ShiftPlayerDown}
+
+}
+
+Function CheckKillZone {
 
 If ($Player.Location -eq $Death.Location) {GameOver}
 If ($Player.Location -eq $Death2.Location) {GameOver}
