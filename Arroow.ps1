@@ -180,7 +180,7 @@ Function ShiftPlayerUp {
 function CheckLegalMove {
 
 
-If ($PlayerXAxis -lt "0") {ShiftPlayerRight}
+If ($PlayerXAxis -lt "0") {ShiftPlayerRight}        # when it pushes back you also get point retard
 If ($PlayerXAxis -gt "300") {ShiftPlayerLeft}
 If ($PlayerYAxis -gt "240") {ShiftPlayerUp}
 If ($PlayerYAxis -lt "0") {ShiftPlayerDown}
